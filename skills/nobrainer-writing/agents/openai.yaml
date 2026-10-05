@@ -1,0 +1,4 @@
+interface:
+  display_name: "NoBrainer Writing"
+  short_description: "Write concise, natural comments, issues, stories, and prose."
+  default_prompt: "Use $nobrainer-writing; use nb-brief for a short, concrete comment, issue, bug report, or user story."
