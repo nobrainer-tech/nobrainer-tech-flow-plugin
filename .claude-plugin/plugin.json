@@ -1,0 +1,20 @@
+{
+  "name": "nobrainer-tech-flow",
+  "description": "nobrainer-tech-flow: portable agentic workflows from task to checked result.",
+  "version": "2.2.1",
+  "author": {
+    "name": "NoBrainer Tech"
+  },
+  "homepage": "https://nobrainer.tech/flow/",
+  "repository": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "agentic-workflows",
+    "multi-session",
+    "spec-driven-development",
+    "verification"
+  ],
+  "displayName": "nobrainer-tech-flow",
+  "icon": "./assets/plugin-logo.png"
+}
