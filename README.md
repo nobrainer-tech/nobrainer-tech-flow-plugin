@@ -22,4 +22,12 @@ The workflow uses the host client's tools and permissions. Its release checker r
 
 Helpers for an authorized code task can use the host's existing GitHub CLI authentication or configured environment. This package grants no credentials or broader access. Supply secrets through the client's supported sensitive configuration; never place them in a prompt, this repository or public logs. Directory policy holds for this behavior remain subject to review.
 
-MIT. The AI client's own access and usage costs apply. [Privacy](docs/PRIVACY.md).
+MIT. The AI client's own access and usage costs apply. [Privacy](https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/blob/main/docs/PRIVACY.md).
+
+## Three reviewer examples
+
+- Planning: “Use nobrainer-tech-flow. Give three observable acceptance checks for a static product page with mobile navigation, readable copy and a contact link.” Expect a bounded checklist; no claim that a page was actually tested.
+- Writing: “Use nobrainer-tech-flow. Rewrite this sentence clearly without adding facts: the plugin provides eighteen modules for research, writing, planning and implementation.” Expect all four purposes and the number preserved.
+- Research: “Use nobrainer-tech-flow. Compare OpenAI and Claude's official native-plugin packaging requirements, cite the current primary sources and list what depends on the client.” Expect supported sources and explicit uncertainty; browser availability depends on the host.
+
+Use public sample inputs in the AI client's own test account. The package requires no NoBrainer service account. These prompts describe checks reviewers can run; they do not establish universal runtime quality.
