@@ -16,5 +16,6 @@
     "verification"
   ],
   "displayName": "nobrainer-tech-flow",
-  "icon": "./assets/plugin-logo.png"
+  "icon": "./assets/plugin-logo.png",
+  "privacyPolicyUrl": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/blob/main/docs/PRIVACY.md"
 }
