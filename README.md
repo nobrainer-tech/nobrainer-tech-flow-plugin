@@ -2,7 +2,7 @@
 
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
-This repository distributes the native skills plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.3.0). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
+This repository distributes the native skills plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.3.1). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
 
 ## Install
 
@@ -10,7 +10,7 @@ In Claude, download the release plugin ZIP, then open Customize > Plugins > Add 
 
 ChatGPT/Codex use the portable plugin format through supported marketplaces or the public directory after approval. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
-For the coding-client npm installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.3.0/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
+For the coding-client npm installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.3.1/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
 
 ## Maintain the distribution
 
