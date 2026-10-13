@@ -6,7 +6,7 @@ This repository distributes the native skills plugin generated from the reviewed
 
 ## Install
 
-In Claude, download the release plugin ZIP, then open Customize > Plugins > Add > Upload plugin. Enable it and start a fresh conversation with “Use nobrainer-tech-flow.” Available tools, permissions and account limits depend on the client.
+In Claude, [download the release plugin ZIP](https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/releases/latest), then open Customize > Plugins > Add > Upload plugin. Enable it and start a fresh conversation with “Use nobrainer-tech-flow.” Available tools, permissions and account limits depend on the client.
 
 ChatGPT/Codex use the portable plugin format through supported marketplaces or the public directory after approval. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
