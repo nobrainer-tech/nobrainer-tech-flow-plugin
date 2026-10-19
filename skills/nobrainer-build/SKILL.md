@@ -109,6 +109,11 @@ artifact merely to make the change look substantial.
    Perform a behavior-preserving simplification pass: remove unused indirection,
    duplicate state and needless fallback layers only when references and tests
    prove the simpler path. Do not compress readable code merely to reduce lines.
+   For a behavior-preserving rewrite, prove the tests would notice a change:
+   seed one deliberate fault per changed behavior class in a disposable copy (or
+   revert it at once), confirm a test fails, revert, and confirm a clean diff.
+   Report `TEST_SENSITIVITY: PROVEN | PARTLY_PROVEN | NOT_PROVEN` (all, some or no
+   classes caught); `NOT_PROVEN` leaves the preservation claim `UNVERIFIED`.
    Check `Done clean`: actual files match the expected scope, no unexpected
    status entry remains, and no placeholder or speculative layer survived.
    If a pull request is part of the authorized delivery, bind its reported checks
@@ -129,15 +134,15 @@ untrusted input, dependency installers or another trust boundary, add a bounded
 
 Pause the affected operation on changed frozen inputs, conflicting writer, failed required check,
 unknown destructive effect, missing credentials/toolchain or a scope-changing
-decision. Merge, deploy, publish, spend, delete, migrate data, change credentials,
-mutate production or weaken safety controls only with their explicit authority.
+decision. Merge, deploy, publish, spend, delete, contact people, migrate data, change
+credentials, mutate production or weaken safety controls only with their explicit authority.
 
 A failed check routes to repair; a missing tool or credential routes through
 [delivery obstacle resolution](../nobrainer-tech-flow/references/delivery.md). Check
 permitted alternatives and continue independent work before reporting BLOCKED.
 
-Do not push through three failed fix-like attempts. Preserve the failing proof,
-return to `nobrainer-rca` or revise the design with the owner.
+When the [Flow corrective-attempt budget](../nobrainer-tech-flow/SKILL.md) is spent,
+preserve the failing proof, return to `nobrainer-rca` or revise the design with the owner.
 
 ## Build report
 
@@ -153,6 +158,7 @@ ACCEPTANCE_TRACE:
 FAILING_PROOF_BEFORE:
 TARGETED_CHECKS:
 BROADER_CHECKS:
+TEST_SENSITIVITY: PROVEN | PARTLY_PROVEN | NOT_PROVEN | NOT_APPLICABLE
 RUNTIME_EVIDENCE:
 REVIEW:
 SIDE_EFFECTS:

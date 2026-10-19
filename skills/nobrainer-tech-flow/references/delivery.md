@@ -154,9 +154,9 @@ eligible work in MAIN.
 A single bounded native delegate needs no Dispatcher queue; MAIN keeps coordination
 and acceptance. Use the [small native-worker packet](communication.md#small-native-worker-packet).
 Durable queues retain the [long-run state](long-run-state.md) and full
-Sessions/Dispatcher contract. Visible conversations require an explicit owner
-request or authorized MAIN restart; never substitute them for unavailable native
-workers.
+Sessions/Dispatcher contract. Visible conversations follow the
+[canonical rule](../SKILL.md#choose-the-smallest-workflow); never substitute
+them for unavailable native workers.
 
 Target concurrency is the minimum of the effective host/model limit, authorized
 usage limits and useful independent ready units. A configured ceiling is not proof
@@ -235,7 +235,8 @@ milestones and downstream evidence. Completed workers never self-accept.
 
 After each milestone, MAIN verifies evidence, updates the existing TODO and
 selects the next ready work without waiting for a new user prompt. Independent
-milestones may run together under the team cap. Keep one overarching goal open
+milestones may run together up to the target concurrency in
+[coordinated team execution](#coordinated-team-execution). Keep one overarching goal open
 until every required milestone and integrated DoD passes. Do not complete and
 replace the native goal for each milestone. Native goals are optional mirrors;
 Markdown remains the portable record. Host pauses or quotas can suspend execution,
