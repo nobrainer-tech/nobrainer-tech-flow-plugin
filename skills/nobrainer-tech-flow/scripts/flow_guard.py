@@ -27,26 +27,41 @@ from pathlib import Path
 
 # One shell command: the text up to the next separator.
 ARGS = r"[^;&|\n]*?"
+# Global options between a tool and its subcommand, each "-x", "--name=value" or an
+# option and one value word, as in "npm -w pkg publish" or "gh -R owner/repo release".
+# Narrower than ARGS, so "npm run publish" or "gh issue create --title release" pass.
+OPTIONS = r"(?:\s+-[^\s;&|]+(?:\s+[^\s;&|-][^\s;&|]*)?)*"
+END = r"(?=\s|$|[;&|)])"
 RISKY = (
-    (re.compile(rf"\bgit\b{ARGS}\spush\b{ARGS}\s(?:--force\S*|-[a-zA-Z]*f[a-zA-Z]*)(?=\s|$|[;&|])"),
+    # --force-with-lease and a "+branch" refspec ask too: they still rewrite the remote.
+    (re.compile(rf"\bgit\b{ARGS}\spush\b{ARGS}\s(?:--force\S*|-[a-zA-Z]*f[a-zA-Z]*|\+[A-Za-z]\S*){END}"),
      "git push --force rewrites the remote branch"),
     (re.compile(rf"\bgit\b{ARGS}\sreset\b{ARGS}\s--hard\b"), "git reset --hard discards uncommitted work"),
     (re.compile(rf"\bgit\b{ARGS}\sclean\b{ARGS}\s(?:--force\b|-[a-zA-Z]*f)"),
      "git clean -f deletes untracked files"),
     (re.compile(rf"\bvercel\b{ARGS}\s--prod\b"), "vercel --prod deploys to production"),
-    (re.compile(r"\bnpm\s+publish\b"), "npm publish releases a package"),
+    (re.compile(rf"\bnpm\b{OPTIONS}\s+publish{END}"), "npm publish releases a package"),
     (re.compile(rf"\bterraform\b{ARGS}\s(?:apply|destroy)\b"), "terraform apply or destroy changes infrastructure"),
     (re.compile(rf"\bkubectl\b{ARGS}\sdelete\b"), "kubectl delete removes cluster resources"),
-    (re.compile(r"\bgh\s+release\s+create\b"), "gh release create publishes a release"),
+    (re.compile(rf"\bgh\b{OPTIONS}\s+release\s+create{END}"), "gh release create publishes a release"),
 )
-# An rm that is not part of "git rm"; its arguments run to the next separator.
-RM = re.compile(r"(?<![\w./-])rm(?=\s)([^;&|\n)]*)")
+# An rm, also path-qualified as /bin/rm or quoted as "rm", that is not part of "git rm";
+# its arguments run to the next separator.
+RM = re.compile(r"(?<![\w./-])[\"']?(?:[\w.-]*/)*rm[\"']?(?=\s)([^;&|\n)]*)")
+# Commands are matched one segment at a time. A segment this long that names a risky
+# tool is asked about whole, because the patterns slow down sharply on long lines.
+SEPARATOR = re.compile(r"[;&|\n]")
+LONGEST_SEGMENT = 2000
+RISKY_TOOL = re.compile(r"\b(?:git|vercel|npm|terraform|kubectl|gh)\b")
+# A directory change before an rm means the hook's cwd no longer says where a relative
+# target is, so the temporary-folder exemption cannot apply to it.
+CHANGE_DIRECTORY = re.compile(r"(?<![\w./-])(?:cd|pushd|popd)(?=\s|$|[;&|)])")
 RECURSIVE = re.compile(r"^(?:-[a-zA-Z]*[rR][a-zA-Z]*|--recursive)$")
 TEMP_ROOTS = ("/tmp", "/private/tmp", "/var/folders", "/private/var/folders")
 TMPDIR_REFERENCE = re.compile(r"^(?:\$TMPDIR|\$\{TMPDIR\})(?=/|$)")
 EDITING_TOOLS = {"Edit", "MultiEdit", "Write", "NotebookEdit", "Bash"}
-# A proof line may sit in a list item or in bold.
-PROOF_LINE = re.compile(r"^[\s>*_-]*(?:Proof|Checked):", re.MULTILINE)
+# A proof line may sit in a bulleted or numbered list item, with the label in bold.
+PROOF_LINE = re.compile(r"^[\s>*_\-]*(?:\d+[.)]\s*)?(?:\*\*|__)?(?:Proof|Checked)(?:\*\*|__)?:", re.MULTILINE)
 STOP_REASON = (
     "Flow guard: this turn changed files or ran commands, but the final message has no "
     "proof. Add a line starting with 'Proof:' or 'Checked:' that names the command, test "
@@ -63,7 +78,9 @@ def temp_roots() -> list[str]:
     for value in (os.environ.get("TMPDIR"), tempfile.gettempdir()):
         if value and os.path.isabs(value):
             roots.append(os.path.normpath(value))
-    return roots
+    # Compared with real paths below, so each root counts in its real form as well
+    # (/tmp is /private/tmp on macOS).
+    return sorted({form for root in roots for form in (root, os.path.realpath(root))})
 
 
 def inside_temp(argument: str, cwd: str | None, roots: list[str]) -> bool:
@@ -77,24 +94,32 @@ def inside_temp(argument: str, cwd: str | None, roots: list[str]) -> bool:
         if not cwd or not os.path.isabs(cwd):
             return False
         argument = os.path.join(cwd, argument)
-    path = os.path.normpath(argument)
+    # Links on the way are followed before any "..", as the shell does: a folder under
+    # /tmp that links to a project is the project, and its real place decides.
+    path = os.path.realpath(argument)
     return any(path.startswith(root.rstrip("/") + "/") for root in roots)
 
 
 def risky_rm(command: str, cwd: str | None) -> str | None:
     roots = temp_roots()
     for match in RM.finditer(command):
-        before = command[: match.start()].split()
-        if before and before[-1] == "git":
+        before = SEPARATOR.split(command[: match.start()])[-1].split()
+        if before and os.path.basename(before[-1]) == "git":
             continue
+        base = None if CHANGE_DIRECTORY.search(command, 0, match.start()) else cwd
         try:
             words = shlex.split(match.group(1))
         except ValueError:
-            words = match.group(1).split()
+            # An open quote means a separator inside it cut the arguments short, or the
+            # "rm" is only a word in quoted text. Only a recursive rm is asked about.
+            rest = command[match.start(1):].split("\n")[0].split()
+            if any(RECURSIVE.match(word.strip("\"'")) for word in rest):
+                return "rm -r with arguments the guard cannot read deletes files for good"
+            continue
         if not any(RECURSIVE.match(word) for word in words):
             continue
         paths = [word for word in words if not word.startswith("-")]
-        if not paths or not all(inside_temp(path, cwd, roots) for path in paths):
+        if not paths or not all(inside_temp(path, base, roots) for path in paths):
             return "rm -r outside a temporary folder deletes files for good"
     return None
 
@@ -107,7 +132,14 @@ def pre_tool(payload: dict) -> dict | None:
     if not isinstance(command, str):
         return None
     cwd = payload.get("cwd") if isinstance(payload.get("cwd"), str) else None
-    reasons = [reason for pattern, reason in RISKY if pattern.search(command)]
+    # A backslash line continuation is one command, so join it before splitting.
+    command = command.replace("\\\n", " ")
+    reasons = []
+    for segment in SEPARATOR.split(command):
+        if len(segment) > LONGEST_SEGMENT and RISKY_TOOL.search(segment):
+            reasons.append("a long command names a risky tool and is too long to check")
+            continue
+        reasons += [reason for pattern, reason in RISKY if pattern.search(segment) and reason not in reasons]
     rm = risky_rm(command, cwd)
     if rm:
         reasons.insert(0, rm)
