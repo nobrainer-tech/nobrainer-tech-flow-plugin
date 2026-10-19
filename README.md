@@ -1,5 +1,7 @@
 # nobrainer-tech-flow plugin
 
+> **The project lives at [nobrainer-tech/nobrainer-tech-flow](https://github.com/nobrainer-tech/nobrainer-tech-flow).** Star it, report issues and read the docs there. This repository is the hook-free plugin build that the plugin directories install.
+
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
 This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.4.0). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.

@@ -6,7 +6,7 @@
     "name": "NoBrainer Tech"
   },
   "homepage": "https://github.com/nobrainer-tech/nobrainer-tech-flow",
-  "repository": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin",
+  "repository": "https://github.com/nobrainer-tech/nobrainer-tech-flow",
   "license": "MIT",
   "keywords": [
     "agent-skills",
@@ -19,5 +19,7 @@
   ],
   "displayName": "nobrainer-tech-flow",
   "icon": "./assets/plugin-logo.png",
-  "privacyPolicyUrl": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/blob/main/docs/PRIVACY.md"
+  "privacyPolicyUrl": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/blob/main/docs/PRIVACY.md",
+  "supportUrl": "https://github.com/nobrainer-tech/nobrainer-tech-flow/issues",
+  "termsOfServiceUrl": "https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/main/LICENSE"
 }
