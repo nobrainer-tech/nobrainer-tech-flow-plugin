@@ -2,19 +2,21 @@
 
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
-This repository distributes the native skills plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.3.1). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
+This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.4.0). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
 
 ## Install
 
-In Claude, download the release plugin ZIP, then open Customize > Plugins > Add > Upload plugin. Enable it and start a fresh conversation with “Use nobrainer-tech-flow.” Available tools, permissions and account limits depend on the client.
+In Claude, [download the release plugin ZIP](https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/releases/latest), then open Customize > Plugins > Add > Upload plugin. Enable it and start a fresh conversation with “Use nobrainer-tech-flow.” Available tools, permissions and account limits depend on the client.
+
+In Claude Code, add this repository as a marketplace and install from it: `/plugin marketplace add nobrainer-tech/nobrainer-tech-flow-plugin`, then `/plugin install nobrainer-tech-flow@nobrainer-tech`.
 
 ChatGPT/Codex use the portable plugin format through supported marketplaces or the public directory after approval. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
-For the coding-client npm installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.3.1/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
+For the coding-client installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.4.0/docs/INSTALL.md). The npm package is not published yet. This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
 
 ## Maintain the distribution
 
-Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName/icon presentation fields, and remove npm package.json. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
+Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName/icon presentation fields, keep .claude-plugin/marketplace.json in step with the manifest version, and remove npm package.json and the unused launcher scripts. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
 
 ## Optional requests and credentials
 

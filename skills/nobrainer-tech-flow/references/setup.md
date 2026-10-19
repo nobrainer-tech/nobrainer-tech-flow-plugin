@@ -89,7 +89,7 @@ placeholders with verified paths/commands and remove duplicate lines:
   nothing. Wiki promotion remains separately sourced, classified and governed.
 - A failed review routes back through implementation and fresh verification;
   never reuse invalidated proof.
-- Merge, deploy, publish, spend, delete, credentials and production mutation
+- Merge, deploy, publish, spend, delete, contact people, credentials and production mutation
   remain explicit owner gates unless exact authority is already recorded.
 - Persist only authorized durable sourced learning; never secrets or live task state.
 <!-- NOBRAINER-WORKFLOW:END -->
@@ -148,10 +148,9 @@ reviewed. Persistent/global installation is an owner gate.
 - Add a durable spec only for contracts, dependencies, migration, risk or
   resumability.
 - Add a wiki only for reusable sourced knowledge beyond normal project docs.
-- Create or reuse visible sessions only after an explicit owner request or an
-  authorized MAIN restart. Independent work, isolation, handoff, resume or a
-  warm specialist alone do not authorize a sidebar conversation; use native
-  subagents or MAIN.
+- Create or reuse visible sessions only under the
+  [canonical rule](../SKILL.md#choose-the-smallest-workflow) (explicit owner
+  request or authorized restart); otherwise use native subagents or MAIN.
 - Keep specification, detailed execution state, reports/evidence and wiki as
   separate owners; link rather than duplicate mutable facts.
 

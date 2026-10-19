@@ -91,17 +91,19 @@ bounded prompt, disjoint scope, observable completion and artifact/test review.
 Do not turn a subtask into a new user-owned visible task unless requested.
 Use `nobrainer-team` to decide missing roles/capabilities, `nobrainer-dispatcher` to
 schedule an approved queue with multiple delegated units, and
-`nobrainer-sessions` to operate explicitly owner-authorized visible sessions.
-Independent work, isolation or reuse alone does not authorize creating one;
-use native subagents, or MAIN when unavailable. Keep a tightly coupled edit in
+`nobrainer-sessions` to operate visible sessions allowed by the
+[canonical rule](../SKILL.md#choose-the-smallest-workflow); otherwise use native
+subagents, or MAIN when unavailable. Keep a tightly coupled edit in
 MAIN. Titles aid humans; IDs and
 readback prove identity.
 
-For a scheduled queue the canonical transition is `Team -> Dispatcher SCHEDULE
--> Sessions setup/delegate -> Dispatcher DISPATCH`. Sessions alone performs
-identity preflight and transport; Dispatcher records `READY -> SENT` from its
-readback. Reports return through `Sessions RECEIVE_AUDIT -> Dispatcher
-RECONCILE`. Do not duplicate the transport step inside Dispatcher.
+For a scheduled queue the default transition is `Team -> Dispatcher SCHEDULE
+-> native subagent spawn -> Dispatcher DISPATCH`; the returned native worker ID is
+the send receipt. For owner-authorized visible sessions it is `Team -> Dispatcher
+SCHEDULE -> Sessions setup/delegate -> Dispatcher DISPATCH`: Sessions alone performs
+identity preflight and transport. Dispatcher records `READY -> SENT` only from the
+receipt. Reports return through `RECEIVE_AUDIT -> Dispatcher RECONCILE`
+(Flow's audit for native workers, Sessions' for visible sessions). Do not duplicate the transport step inside Dispatcher.
 
 ## Unattended-run evidence
 
