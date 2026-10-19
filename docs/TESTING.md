@@ -1,7 +1,232 @@
-# Verify the native distribution
+# Testing and evaluation
 
-Run `_maintainers/verify_release.py` from this repository. It checks canonical release provenance, every skill file, metadata, required paths, Python syntax and the native package boundary.
+The repository uses four evidence layers. A green lower layer never proves a
+higher one.
 
-The full source suite belongs to the [immutable canonical v2.4.0 testing documentation](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.4.0/docs/TESTING.md). This repository deliberately omits npm/client-adapter manifests, lifecycle hooks and evaluation archives; it is not a source-development checkout.
+## 1. Structure and public safety
 
-Separate generated-file validation, client import/enabling, a fresh-task run and public directory approval. Configuration and another agent's report alone do not prove runtime or publication.
+- portable frontmatter, directory/name identity and exact active inventory;
+- relative companion links and retired-name exclusion;
+- public-clean text, manifest parsing and version consistency;
+- installer conflict refusal, foreign retired-name preservation, exact legacy
+  migration, idempotence, readback, race-safe atomic restore and
+  preserved migration/rollback recovery claims;
+- secret scanning before publication.
+
+Run:
+
+```bash
+python3 scripts/validate_skills.py
+python3 scripts/validate_skills.py --suite
+```
+
+## 2. Deterministic behavior contracts
+
+Unit tests pressure the routing, model-policy and safety invariants that can be
+checked without an LLM: Flow states, bounded-turn `SESSION_HEALTH_GATE`,
+checkpoint/end-turn decisions, separate `RUNTIME_RELEASE`, session identity and
+lease gates, SDD boundaries, trigger ownership, browser routing, adapter
+registration and installer races.
+Adapter tests execute every bootstrap mechanism that can run locally: the Claude
+and Cursor SessionStart JSON shapes, OpenCode injection/deduplication (including
+a first message without a text part), and Pi discovery plus per-request
+injection. They also parse the portable Agent
+Plugin, Gemini and Kimi manifests, reject invented Devin/Hermes adapters and
+enforce the exact eighteen-skill inventory, correction hooks and workflow
+diagram contract.
+
+Static delegation contract checks cover ready-unit dispatch, the compact native
+packet, completion-driven refill and uncertain-send safeguards in the
+[canonical delegation contract](../skills/nobrainer-tech-flow/references/delivery.md#coordinated-team-execution).
+These source checks do not prove native worker launches, accepted runtime output,
+or any speed, token or quality gain. Those require a recorded client run.
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+### Session-lifetime smoke
+
+[`tests/test_session_lifecycle.py`](../tests/test_session_lifecycle.py) is a
+deterministic, model-free protocol smoke. It covers the nominal clean-session
+trace, each health-gate event, configurable warning/hard limits, unknown and
+unsupported signals with safe bounded continuation, strict-budget refusal, checkpoint plus `END_TURN` without authorized rotation,
+`task_complete` with a live controlled worker followed by explicit release, and
+empty-ready-set handling: wait for running work, audit reports, finish accepted
+work, or surface a real owner decision. It also
+proves that resume reads the durable Markdown goal instead of stale summary
+text, and that host clear requires capability, no active writer and positive
+readback; otherwise the contract ends the turn or requires manual action. It does
+not prove that Codex, Claude Code,
+OpenCode or another host exposes those signals; that requires the clean-session
+readback below.
+
+GitHub Actions runs these deterministic layers on Linux and macOS, and the whole
+suite once more on Python 3.13 (a symlink-loop check that relied on an exception
+Python 3.13 no longer raises went unnoticed on 3.11). It checks
+Python, Node and shell syntax plus deterministic adapter contracts, and runs a
+checksum-pinned Gitleaks tree scan on Linux. A Windows job runs the structure
+validators, the adapter tests (including the LF pins for the hook scripts and the
+bootstrap), [`tests/test_windows_smoke.py`](../tests/test_windows_smoke.py):
+the hook wrapper under Git Bash, a copy-mode install, personalization and the UTC
+session title, and both one-command installers,
+[`tests/test_one_command_installer.py`](../tests/test_one_command_installer.py)
+and [`tests/test_shell_installer.py`](../tests/test_shell_installer.py) (the shell
+one under Git Bash), previewing, installing, repeating and undoing on that runner.
+CI sets `NOBRAINER_REQUIRE_SYMLINKS=1`, so a runner that cannot create links fails
+those tests instead of skipping them. It does not run the whole suite on Windows:
+some historical evidence tests compare text byte for byte and assume LF checkouts.
+CI does not claim a client UI or model followed a skill.
+
+The one-command installer tests run the real scripts against a private home:
+preview writes nothing, apply links every skill and writes one block without any
+standing authorization, a second apply changes nothing, undo puts the instruction
+file back byte for byte (and keeps edits made outside the block since), a foreign
+canonical target is refused before any write, and the variables and `--home`
+select the same place the helpers do. The shell installer's tests also run it in
+every POSIX shell found (dash, bash in POSIX mode, busybox sh, zsh emulating sh), with no Python on
+its `PATH`, and check that its block is byte for byte the Python helper's, that
+either installer undoes what the other did with the same bytes, and that a
+tampered setup record is refused. Both installers preserve foreign targets at
+retired names through preview, apply, repeat and undo, while exact old links,
+renamed aliases and unresolved legacy names still block. Shell tests compare
+exact-link classification with Python for absolute, relative, chained and looping
+links in every available shell. They also check that a second undo is a no-op
+that writes nothing, that undo removes the empty folders the setup created and no
+others, that a repeat apply says `UP TO DATE` without a restart hint, and that
+`install.sh` replaces a block of an earlier version while every byte around it
+stays. In the 2.0.2 measurement they caught 30 of 34
+mutants of `install.sh`; the [2.0.2 record](releases/v2.0.2.md) says why the
+other four were not caught.
+
+## 3. Forward behavior evaluation
+
+Historical v1.6 runtime receipts bind the frozen source archive, not a changing
+checkout. The test rejects missing, duplicate or altered archived entries and
+continues checking the original case and output hashes. A later instruction
+review is source-contract evidence unless fresh model runs are recorded for its
+exact bytes; it cannot upgrade the release's runtime proof.
+
+Behavior-shaping changes need a frozen scenario set, an unchanged baseline and
+an independent judge. Keep development cases separate from final holdout cases;
+do not tune against a failed holdout. Record accepted findings, null results,
+digest, rollback and any model/harness substitutions.
+
+Before baseline scoring, self-test the complete evaluator with known-good and
+known-bad controls plus a deceptive control when the metric can be gamed.
+Candidate writes must not reach the rubric, cases, score extractor or acceptance
+harness. Bind each score to target/evaluator/case identities and raw evidence;
+changed receipt fields require re-baselining. Predeclare equal repetitions for
+stochastic comparisons and require at least three paired runs for a borderline
+promotion claim.
+
+The [v1.6.1 evidence](releases/v1.6.1.md) records fresh response simulations
+and actual artifact execution, including failed behavioral gates. No measured
+model-quality promotion is accepted. Artifact integrity and score arithmetic
+are checked independently of those behavioral verdicts.
+
+The v1.6 probes and their source bindings are in
+[`releases/v1.6.0.md`](releases/v1.6.0.md). Source-only contract tests and
+one behavioral trial are not a comparative benchmark. Earlier changed-control records are
+[`evals/v1.3.0-harness-clarity-2026-08-30.md`](evals/v1.3.0-harness-clarity-2026-08-30.md),
+[`evals/dispatcher-routing-v1.2.0-2026-08-28.md`](evals/dispatcher-routing-v1.2.0-2026-08-28.md)
+and
+[`evals/writing-density-v1.2.0-2026-08-28.md`](evals/writing-density-v1.2.0-2026-08-28.md).
+The broader v1.1 routing baseline remains in
+[`evals/core-routing-v1.1.0-2026-08-28.md`](evals/core-routing-v1.1.0-2026-08-28.md).
+Do not mix scores across changed inventories, prompts or rubrics.
+
+## 4. Client runtime acceptance
+
+A client becomes runtime-verified only after a clean-session transcript proves
+discovery and correct first actions. Follow
+[`COMPATIBILITY.md`](COMPATIBILITY.md). Marketplace publication, production
+behavior and buyer usefulness each require their own readback.
+
+For a long-running probe, read back `SESSION_HEALTH_GATE` at `START`,
+`AFTER_COMPACTION`, `MATERIAL_TRANSITION` and `BEFORE_CLOSEOUT`, including the
+host policy and actual signal values. Read back `RUNTIME_RELEASE` separately;
+`task_complete` is not evidence that task-owned browser, tool or subprocess
+workers ended. A missing capability is `UNKNOWN` or `UNSUPPORTED`, lowers the
+runtime proof, and must not be reported as a clean-runtime pass. Missing optional telemetry
+does not block safe artifact delivery; missing enforcement of an explicitly
+required hard budget blocks only work that depends on that guarantee.
+Native goals are optional and require the host tool's authorization; a Markdown
+goal is sufficient. Before a host clear, persist and read back `GOAL_FILE`, verify no task-owned
+writer remains, record `CLEAR_MODE`, then prove clear completion. Start a fresh
+turn by reading the same goal file and reconciling repository, checkout, state
+and next safe action; transcript text alone is not recovery evidence.
+
+For Codex, test explicit invocation with the name the client lists for the module
+(`$nobrainer-tech-flow:nobrainer-tech-flow` when it lists modules under the plugin
+name, `$nobrainer-tech-flow` when it lists them plainly; the other form adds no
+module text) and test plain aliases separately as implicit-routing controls. Bind
+the transcript to the exact installed skill hash and disable same-name user copies
+in an isolated probe; two skills with the same name are not merged. An alias
+failure must not be reported as a source-isolated behavior result.
+
+Model-policy tests prove the portable `STANDARD`, `EXTENDED` and `ROUTED`
+contract, including the no-silent-switch rule. They do not prove that a client
+actually selects a provider model. That requires a clean-session readback of
+requested versus actual model, effort, budget and escalation behavior.
+
+## Release gate
+
+A releasable commit requires:
+
+- all deterministic checks green on the exact commit;
+- no unresolved P0/P1 review finding;
+- a public-clean and secret scan;
+- a recorded behavior holdout for changed workflow controls;
+- a review-failure scenario proving the route returns to Build with invalidated
+  evidence;
+- a public-surface coherence check: every affected README, doc, template and
+  diagram is updated and read back, or `NOT_NEEDED` is recorded with a reason;
+  flow changes refresh both the SVG and README Mermaid chart;
+- honest compatibility labels;
+- model names and marketing remain workflow-positioning claims unless direct
+  runtime evidence exists;
+- a rollback path;
+- owner approval for merge and publication.
+
+Scan the exact staged candidate with:
+
+```bash
+gitleaks git --pre-commit --staged --redact --no-banner --ignore-gitleaks-allow
+```
+
+A full-history finding is a separate history-remediation decision. Investigate
+it explicitly; do not hide it behind a broad allowlist or treat it as proof that
+the staged candidate introduced a secret.
+
+## Session restart
+
+`tests/test_restart_gate.py` invokes the shipped helper rather than a test-only
+copy. It covers startup-cost payback, unknown economics, repeated restart without
+progress, consent, unknown writers, stale checkpoints/ACKs, uncertain transport,
+unsupported transfer and archive/takeover ordering. These are decision-level
+tests; no real session is created or archived by the helper.
+
+Native-adapter acceptance additionally requires an actual fresh target, visible
+read-only ACK, authoritative conditional transfer, target takeover and exact old
+session archive readback. Include a competing trigger and interrupted create.
+Measure accepted work and total input/output/compaction/recovery usage before
+and after; deterministic decisions do not establish token or quality gains.
+
+
+## 2.1.0 idea intake and plain technical English
+
+The [2.1.0 record](releases/v2.1.0.md) separates instruction review, bounded
+same-session writing exercises, repository tests and public release readback.
+The baseline already followed an explicitly requested SDD/end-to-end path;
+this release does not claim a measured behavioral gain from making it explicit.
+A formal ASD-STE100 audit, clean-session client discovery and comparative model
+cost/speed tests remain outside this evidence.
+
+
+## 2.2.0 presentation and closeout
+
+The [2.2.0 record](releases/v2.2.0.md) binds fresh Codex/Claude print runs to
+the exact communication reference and retains synthetic prompts and responses.
+These are explicit-source behavior slices. Host-executed artifact checks do not
+prove automatic discovery or autonomous whole-task execution in either client.
