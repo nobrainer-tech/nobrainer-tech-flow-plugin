@@ -4,7 +4,7 @@
 
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
-This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.7.2). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
+This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.7.3). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
 
 ## Install
 
@@ -14,7 +14,7 @@ In Claude Code, add this repository as a marketplace and install from it: `/plug
 
 ChatGPT/Codex use the portable plugin format through supported marketplaces or the public directory after approval. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
-For the coding-client installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.7.2/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
+For the coding-client installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.7.3/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
 
 ## Maintain the distribution
 
@@ -22,7 +22,7 @@ Generate the native plugin ZIP with scripts/build_plugin.py in the canonical rep
 
 ## Optional requests and credentials
 
-The workflow uses the host client's tools and permissions. Its release checker requests public release metadata from GitHub. Classification decisions are advisory and off by default: the TypeSafe adapter can make a request only when explicitly enabled on authorized data, and uses an existing TYPESAFE_API_KEY in the host environment. The offline Laya adapter requires an already configured local model and runtime; its first model setup can need a network download. The fallback remains available when an optional provider is unavailable.
+The workflow uses the host client's tools and permissions. Its release checker requests public release metadata from GitHub. Classification decisions are advisory and off by default: the TypeSafe adapter can make a request only when explicitly enabled on authorized data, and takes its key only when the user pipes it on standard input with `--key-stdin`; the helper reads no credential from the machine. The offline Laya adapter requires an already configured local model and runtime; its first model setup can need a network download. The fallback remains available when an optional provider is unavailable.
 
 Helpers for an authorized code task can use the host's existing GitHub CLI authentication or configured environment. This package grants no credentials or broader access. Supply secrets through the client's supported sensitive configuration; never place them in a prompt, this repository or public logs. Directory policy holds for this behavior remain subject to review.
 
