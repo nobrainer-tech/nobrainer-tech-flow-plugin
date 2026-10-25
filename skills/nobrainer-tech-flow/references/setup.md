@@ -59,10 +59,11 @@ placeholders with verified paths/commands and remove duplicate lines:
 - Read the actual checkout, instructions, relevant wiki knowledge and tests first.
 - Use one short requirements gate, freeze the minimum change and run the
   approved scope autonomously. Show a compact Progress checklist at meaningful
-  transitions. Keep one canonical TODO owner.
+  transitions. Keep one canonical TODO owner, visible in the host's plan or todo tool when it has one.
 - Use a detailed ledger only for multi-session, dependency-rich,
-  consequential or explicitly resumable work; ordinary single-session work
-  keeps the short checklist.
+  consequential or explicitly resumable work, or when the owner keeps adding
+  requests in one long conversation; ordinary single-session work keeps the
+  short checklist.
 - Prefer the smallest complete change. Apply KISS and YAGNI; deduplicate owned
   knowledge, not incidental similarity; preserve cohesive dependency boundaries.
 - Use `nobrainer-team`, `nobrainer-dispatcher` and `nobrainer-sessions` only for
@@ -138,10 +139,8 @@ data and cost scope is authorized. Without process tools use the existing
 project instruction/tracker as the preference store.
 
 Use `nobrainer-team` to compare the eighteen curated skills, project-native tools
-and active runtime. A missing specialist may be evaluated temporarily through
-the open skills ecosystem only after source/ref, instructions, scripts, license,
-permissions, network/credential behavior, trigger overlap and rollback are
-reviewed. Persistent/global installation is an owner gate.
+and active runtime. For a missing specialist, Team writes a task-local brief for
+a native worker; it never searches for, installs or runs third-party skills.
 
 ## 5. Choose justified artifacts and sessions
 
