@@ -18,7 +18,7 @@ For the coding-client installer, use the [canonical installation guide](https://
 
 ## Maintain the distribution
 
-Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName/icon presentation fields, keep .claude-plugin/marketplace.json in step with the manifest version, and remove npm package.json and the unused launcher scripts. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
+Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName and listing URL fields, copy assets/plugin-logo.png to .claude-plugin/icon.png (the directory finds the icon there; do not add an `icon` field), keep .claude-plugin/marketplace.json in step with the manifest version, remove npm package.json and the unused launcher scripts, and keep only docs/CHAT_PLUGINS.md and docs/PRIVACY.md from docs/. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
 
 ## Optional requests and credentials
 
