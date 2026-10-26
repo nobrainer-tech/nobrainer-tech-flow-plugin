@@ -34,6 +34,8 @@ with zipfile.ZipFile(io.BytesIO(payload)) as archive:
 skills = list((ROOT / "skills").glob("*/SKILL.md"))
 assert len(skills) == 18
 assert not any((ROOT / name).exists() for name in ("bin", "package.json", "package-lock.json", "hooks", ".app.json", ".mcp.json", "mcp.json"))
+# This copy is tracked by the Claude directory only; ChatGPT and Codex use the canonical release.
+assert not any((ROOT / name).exists() for name in ("plugin.json", ".codex-plugin", "assets"))
 # The native plugin ships only the docs it links; the rest stay in the canonical repository.
 docs = sorted(path.relative_to(ROOT).as_posix() for path in (ROOT / "docs").rglob("*") if path.is_file())
 assert docs == ["docs/CHAT_PLUGINS.md", "docs/PRIVACY.md"], docs
@@ -44,15 +46,11 @@ for path in ROOT.rglob("*"):
     assert path.suffix not in (".zip", ".tgz", ".tar", ".gz"), path
     if path.suffix == ".py":
         ast.parse(path.read_text(), filename=str(path))
-for name in ("plugin.json", ".claude-plugin/plugin.json", ".codex-plugin/plugin.json"):
-    manifest = json.loads((ROOT / name).read_text())
-    assert manifest["name"] == "nobrainer-tech-flow"
-    assert manifest["version"] == source["tag"][1:]
-    assert "hooks" not in manifest and "mcpServers" not in manifest
 claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())
-# The directory finds the listing icon at .claude-plugin/icon.png; an `icon` field is flagged.
+assert claude["name"] == "nobrainer-tech-flow"
+assert claude["version"] == source["tag"][1:]
+assert "hooks" not in claude and "mcpServers" not in claude
+# The directory reads the listing icon from the .claude-plugin folder; an `icon` field is flagged.
 assert "icon" not in claude
-assert (ROOT / ".claude-plugin/icon.png").read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
-assert (ROOT / ".claude-plugin/icon.png").read_bytes() == (ROOT / "assets/plugin-logo.png").read_bytes()
 assert (ROOT / "skills/nobrainer-tech-flow/VERSION").read_text().strip() == source["tag"][1:]
 print("NATIVE_DISTRIBUTION_VERIFIED: 18 canonical skills; all resource bytes match; metadata, syntax and native boundary pass.")
