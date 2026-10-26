@@ -12,13 +12,13 @@ In Claude, [download the release plugin ZIP](https://github.com/nobrainer-tech/n
 
 In Claude Code, add this repository as a marketplace and install from it: `/plugin marketplace add nobrainer-tech/nobrainer-tech-flow-plugin`, then `/plugin install nobrainer-tech-flow@nobrainer-tech`.
 
-ChatGPT/Codex use the portable plugin format through supported marketplaces or the public directory after approval. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
+ChatGPT and Codex install from the canonical repository's marketplace or the canonical release ZIP; this copy carries only the Claude manifest. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
 For the coding-client installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.7.3/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks and evaluation archives.
 
 ## Maintain the distribution
 
-Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName and listing URL fields, copy assets/plugin-logo.png to .claude-plugin/icon.png (the directory finds the icon there; do not add an `icon` field), keep .claude-plugin/marketplace.json in step with the manifest version, remove npm package.json and the unused launcher scripts, and keep only docs/CHAT_PLUGINS.md and docs/PRIVACY.md from docs/. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
+Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName and listing URL fields, keep the brand icon in the .claude-plugin folder (the directory finds it there; do not add an `icon` field), drop the root plugin.json, the .codex-plugin folder and the assets folder, keep .claude-plugin/marketplace.json in step with the manifest version, remove npm package.json and the unused launcher scripts, and keep only docs/CHAT_PLUGINS.md and docs/PRIVACY.md from docs/. Compare all eighteen SKILL.md files and their references byte for byte against the source. Review the diff, publish through a PR, and read back the target clients and directory status.
 
 ## Optional requests and credentials
 
