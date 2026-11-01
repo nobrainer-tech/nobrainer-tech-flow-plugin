@@ -1,8 +1,8 @@
 {
   "canonical_repository": "https://github.com/nobrainer-tech/nobrainer-tech-flow",
-  "tag": "v2.9.1",
-  "commit": "5fe7273ea0f5d3dd831af84fd276b21525e3c395",
+  "tag": "v2.9.2",
+  "commit": "71f54523943a80341d211047759eae507f9eb5e1",
   "distribution_repository": "https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin",
   "skill_bodies": "identical to canonical release",
-  "plugin_zip_sha256": "b5aafdea6f88ea4cdcc0cec4e1eff26b4697ce7e223bdc35a9153622cd546e42"
+  "plugin_zip_sha256": "89c7fae0f9745923180b93b4fb4b676730ea382ab79ac34d8ae76caae5606ba6"
 }
