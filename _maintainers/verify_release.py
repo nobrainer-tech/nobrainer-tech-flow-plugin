@@ -10,6 +10,7 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+HOOK_HELPERS = ("skills/nobrainer-tech-flow/scripts/flow_guard.py",)
 source = json.loads((ROOT / "SOURCE.json").read_text())
 assert source["canonical_repository"] == "https://github.com/nobrainer-tech/nobrainer-tech-flow"
 assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", source["tag"])
@@ -27,8 +28,14 @@ with urllib.request.urlopen(url, timeout=30) as response:
 assert hashlib.sha256(payload).hexdigest() == source["plugin_zip_sha256"]
 with zipfile.ZipFile(io.BytesIO(payload)) as archive:
     canonical = {name: archive.read(name) for name in archive.namelist() if name.startswith("skills/") and not name.endswith("/")}
+    # This copy declares no hooks, so the lifecycle-hook helper never runs here; the
+    # Claude directory held every version that shipped it, so it stays out.
+    for name in HOOK_HELPERS:
+        assert name in canonical, "Hook helper missing from the reviewed ZIP: " + name
+        assert not (ROOT / name).exists(), "This hook-free copy must not ship " + name
+        del canonical[name]
     exported = {path.relative_to(ROOT).as_posix(): path.read_bytes() for path in (ROOT / "skills").rglob("*") if path.is_file()}
-    assert canonical == exported, "Every skill body, reference and helper must match the reviewed ZIP."
+    assert canonical == exported, "Every other skill body, reference and helper must match the reviewed ZIP."
     for name in ("install_skills.py", "install_personalization.py"):
         assert (ROOT / "scripts" / name).read_bytes() == archive.read("scripts/" + name)
 skills = list((ROOT / "skills").glob("*/SKILL.md"))
@@ -53,4 +60,4 @@ assert "hooks" not in claude and "mcpServers" not in claude
 # The directory reads the listing icon from the .claude-plugin folder; an `icon` field is flagged.
 assert "icon" not in claude
 assert (ROOT / "skills/nobrainer-tech-flow/VERSION").read_text().strip() == source["tag"][1:]
-print("NATIVE_DISTRIBUTION_VERIFIED: 18 canonical skills; all resource bytes match; metadata, syntax and native boundary pass.")
+print("NATIVE_DISTRIBUTION_VERIFIED: 18 canonical skills; all resource bytes match except the omitted hook helper; metadata, syntax and native boundary pass.")
