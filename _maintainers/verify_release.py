@@ -10,7 +10,14 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-HOOK_HELPERS = ("skills/nobrainer-tech-flow/scripts/flow_guard.py",)
+# The only canonical files this copy leaves out. The Claude directory held every version
+# that shipped them ("Uses a credential from the user's machine"): flow_guard.py is the
+# lifecycle-hook helper, which never runs here because this copy declares no hooks;
+# typed_decisions.py is the optional Jev and Laya runner, so this copy keeps the core path.
+OMITTED = (
+    "skills/nobrainer-tech-flow/scripts/flow_guard.py",
+    "skills/nobrainer-tech-flow/scripts/typed_decisions.py",
+)
 source = json.loads((ROOT / "SOURCE.json").read_text())
 assert source["canonical_repository"] == "https://github.com/nobrainer-tech/nobrainer-tech-flow"
 assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", source["tag"])
@@ -28,11 +35,12 @@ with urllib.request.urlopen(url, timeout=30) as response:
 assert hashlib.sha256(payload).hexdigest() == source["plugin_zip_sha256"]
 with zipfile.ZipFile(io.BytesIO(payload)) as archive:
     canonical = {name: archive.read(name) for name in archive.namelist() if name.startswith("skills/") and not name.endswith("/")}
-    # This copy declares no hooks, so the lifecycle-hook helper never runs here; the
-    # Claude directory held every version that shipped it, so it stays out.
-    for name in HOOK_HELPERS:
-        assert name in canonical, "Hook helper missing from the reviewed ZIP: " + name
-        assert not (ROOT / name).exists(), "This hook-free copy must not ship " + name
+    # Only standalone helper scripts may be left out, never a skill body or reference.
+    assert len(set(OMITTED)) == len(OMITTED) == 2, OMITTED
+    for name in OMITTED:
+        assert name.startswith("skills/nobrainer-tech-flow/scripts/") and name.endswith(".py"), name
+        assert name in canonical, "Omitted file missing from the reviewed ZIP: " + name
+        assert not (ROOT / name).exists(), "This copy must not ship " + name
         del canonical[name]
     exported = {path.relative_to(ROOT).as_posix(): path.read_bytes() for path in (ROOT / "skills").rglob("*") if path.is_file()}
     assert canonical == exported, "Every other skill body, reference and helper must match the reviewed ZIP."
@@ -60,4 +68,4 @@ assert "hooks" not in claude and "mcpServers" not in claude
 # The directory reads the listing icon from the .claude-plugin folder; an `icon` field is flagged.
 assert "icon" not in claude
 assert (ROOT / "skills/nobrainer-tech-flow/VERSION").read_text().strip() == source["tag"][1:]
-print("NATIVE_DISTRIBUTION_VERIFIED: 18 canonical skills; all resource bytes match except the omitted hook helper; metadata, syntax and native boundary pass.")
+print("NATIVE_DISTRIBUTION_VERIFIED: 18 canonical skills; all resource bytes match except the two omitted helpers; metadata, syntax and native boundary pass.")
