@@ -9,10 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      # The copy and the canonical verifier sit in separate folders, so the verifier's
+      # file-type rule never sees its own script.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          path: copy
           persist-credentials: false
+      - id: source
+        run: |
+          tag="$(jq -r .tag copy/SOURCE.json)"
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "SOURCE.json tag is not vX.Y.Z"; exit 1; }
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: nobrainer-tech/nobrainer-tech-flow
+          ref: ${{ steps.source.outputs.tag }}
+          path: canonical
+          persist-credentials: false
+          sparse-checkout: scripts/verify_native_export.py
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.11"
-      - run: python3 _maintainers/verify_release.py
+      - run: python3 -I canonical/scripts/verify_native_export.py copy

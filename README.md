@@ -1,6 +1,6 @@
 # nobrainer-tech-flow plugin
 
-> **The project lives at [nobrainer-tech/nobrainer-tech-flow](https://github.com/nobrainer-tech/nobrainer-tech-flow).** Star it, report issues and read the docs there. This repository is the hook-free plugin build that the plugin directories install.
+> **The project lives at [nobrainer-tech/nobrainer-tech-flow](https://github.com/nobrainer-tech/nobrainer-tech-flow).** Star it, report issues and read the docs there. This repository is the script-free plugin build that the Claude plugin directory installs.
 
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
@@ -14,17 +14,15 @@ In Claude Code, add this repository as a marketplace and install from it: `/plug
 
 ChatGPT and Codex install from the canonical repository's marketplace or the canonical release ZIP; this copy carries only the Claude manifest. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
-For the coding-client installer, use the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.11.0/docs/INSTALL.md). This native distribution omits command-line launchers, lifecycle hooks with their helper `flow_guard.py`, the optional Jev and Laya runner `typed_decisions.py` (decisions keep the core path; git and npm installs include it), and evaluation archives.
+This copy holds only Markdown, plain text, JSON, YAML and the brand icon, because the Claude directory accepts scripts and programs only from organizations it has verified. It leaves out every script under `skills/*/scripts/`, the command-line launchers, lifecycle hooks and evaluation archives. Where a skill names a bundled script, the agent does the same check by hand or with a host tool and says so. Git and npm installs from the canonical repository include the scripts: see the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.11.0/docs/INSTALL.md).
 
 ## Maintain the distribution
 
-Generate the native plugin ZIP with scripts/build_plugin.py in the canonical repository at a reviewed stable tag. Extract it into this repository, preserve these distribution instructions and SOURCE.json, add the Claude displayName and listing URL fields, keep the brand icon in the .claude-plugin folder (the directory finds it there; do not add an `icon` field), drop the root plugin.json, the .codex-plugin folder and the assets folder, keep .claude-plugin/marketplace.json in step with the manifest version, remove npm package.json, the unused launcher scripts and the two helpers skills/nobrainer-tech-flow/scripts/flow_guard.py and skills/nobrainer-tech-flow/scripts/typed_decisions.py (the directory held every version that shipped them), and keep only docs/CHAT_PLUGINS.md and docs/PRIVACY.md from docs/. Compare all eighteen SKILL.md files and their references byte for byte against the source; `_maintainers/verify_release.py` checks every file except those two helpers. Review the diff, publish through a PR, and read back the target clients and directory status.
+Export a reviewed stable release with `scripts/export_native.py` in the canonical repository: it takes the release's plugin ZIP, its tag and commit, and a clean checkout of this repository, writes the copy and checks it with `scripts/verify_native_export.py`. The check allows only the file types above, refuses any file that starts with `#!` and any package-manager file, and requires every skill file this copy keeps to be byte-identical to the release ZIP. This repository's CI runs the same verifier from the canonical tag that SOURCE.json names. Review the diff, publish through a PR, and read back the target clients and the directory status.
 
-## Optional requests and credentials
+## Requests and credentials
 
-The workflow uses the host client's tools and permissions. Its release checker requests public release metadata from GitHub. Classification decisions are advisory and off by default: the TypeSafe adapter can make a request only when explicitly enabled on authorized data, and takes its key only when the user pipes it on standard input with `--key-stdin`; the helper reads no credential from the machine. The offline Laya adapter requires an already configured local model and runtime; its first model setup can need a network download. The fallback remains available when an optional provider is unavailable.
-
-Helpers for an authorized code task can use the host's existing GitHub CLI authentication or configured environment. This package grants no credentials or broader access. Supply secrets through the client's supported sensitive configuration; never place them in a prompt, this repository or public logs. Directory policy holds for this behavior remain subject to review.
+This copy ships no code: it makes no network request and reads no credential or environment variable. The agent works with the host client's own tools and permissions, and this package grants none. Supply secrets through the client's supported sensitive configuration; never place them in a prompt, this repository or public logs.
 
 MIT. The AI client's own access and usage costs apply. [Privacy](https://github.com/nobrainer-tech/nobrainer-tech-flow-plugin/blob/main/docs/PRIVACY.md).
 
