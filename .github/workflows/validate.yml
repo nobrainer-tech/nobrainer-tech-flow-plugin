@@ -15,15 +15,13 @@ jobs:
         with:
           path: copy
           persist-credentials: false
-      - id: source
-        run: |
-          tag="$(jq -r .tag copy/SOURCE.json)"
-          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "SOURCE.json tag is not vX.Y.Z"; exit 1; }
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      # Pinned to the canonical commit whose verifier allows a file without an extension only
+      # as a license, readme or .gitignore; the v2.12.0 tag still has the looser rule. At the
+      # next release export, go back to the tag that SOURCE.json names.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: nobrainer-tech/nobrainer-tech-flow
-          ref: ${{ steps.source.outputs.tag }}
+          ref: b48f15cb78fc2aa5cd97a2e772db00b6b805cdeb
           path: canonical
           persist-credentials: false
           sparse-checkout: scripts/verify_native_export.py
