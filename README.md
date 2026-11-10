@@ -4,7 +4,7 @@
 
 From task to done. Bring the same eighteen workflow modules into your assistant for research, writing, planning and implementation.
 
-This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.11.0). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
+This repository distributes the native plugin generated from the reviewed [canonical nobrainer-tech-flow release](https://github.com/nobrainer-tech/nobrainer-tech-flow/releases/tag/v2.12.0). The skill bodies and references come from that source; SOURCE.json records its immutable version and commit. Keep code changes in the canonical repository.
 
 ## Install
 
@@ -14,7 +14,7 @@ In Claude Code, add this repository as a marketplace and install from it: `/plug
 
 ChatGPT and Codex install from the canonical repository's marketplace or the canonical release ZIP; this copy carries only the Claude manifest. Public directory approval is separate from source publication. See [supported setup paths](docs/CHAT_PLUGINS.md).
 
-This copy holds only Markdown, plain text, JSON, YAML and the brand icon, because the Claude directory accepts scripts and programs only from organizations it has verified. It leaves out every script under `skills/*/scripts/`, the command-line launchers, lifecycle hooks and evaluation archives. Where a skill names a bundled script, the agent does the same check by hand or with a host tool and says so. Git and npm installs from the canonical repository include the scripts: see the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.11.0/docs/INSTALL.md).
+This copy holds only Markdown, plain text, JSON, YAML and the brand icon, because the Claude directory accepts scripts and programs only from organizations it has verified. It leaves out every script under `skills/*/scripts/`, the command-line launchers, lifecycle hooks and evaluation archives. Where a skill names a bundled script, the agent does the same check by hand or with a host tool and says so. Git and npm installs from the canonical repository include the scripts: see the [canonical installation guide](https://github.com/nobrainer-tech/nobrainer-tech-flow/blob/v2.12.0/docs/INSTALL.md).
 
 ## Maintain the distribution
 
