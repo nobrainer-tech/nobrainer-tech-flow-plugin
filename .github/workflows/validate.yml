@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: nobrainer-tech/nobrainer-tech-flow
-          ref: fe3f757b75e855cdc9a5dae4a7e165b0dac40dac
+          ref: b48f15cb78fc2aa5cd97a2e772db00b6b805cdeb
           path: canonical
           persist-credentials: false
           sparse-checkout: scripts/verify_native_export.py
